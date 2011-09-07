@@ -1,5 +1,5 @@
-webengine-virtmanager (0.1.0~dev-1) unstable; urgency=low
+webengine-virtmanager (0.1.0-1) unstable; urgency=low
 
   * Initial release, closes: #4740.
 
- -- Gilles Dartiguelongue <gilles.dartiguelongue@smartjog.com>  Wed, 07 Sep 2011 16:37:46 +0200
+ -- Gilles Dartiguelongue <gilles.dartiguelongue@smartjog.com>  Wed, 07 Sep 2011 16:38:16 +0200
