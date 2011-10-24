@@ -1,8 +1,8 @@
-webengine-virtmanager (0.1.1~dev-1) unstable; urgency=low
+webengine-virtmanager (0.1.1-1) unstable; urgency=low
 
   * New upstream release, closes: #5040.
 
- -- Gilles Dartiguelongue <gilles.dartiguelongue@smartjog.com>  Mon, 24 Oct 2011 12:15:46 +0200
+ -- Gilles Dartiguelongue <gilles.dartiguelongue@smartjog.com>  Mon, 24 Oct 2011 16:12:19 +0200
 
 webengine-virtmanager (0.1.0-1) unstable; urgency=low
 
