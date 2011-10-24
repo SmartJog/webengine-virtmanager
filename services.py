@@ -11,6 +11,7 @@ def get_status(_request):
     """ Return status of all virtual machine instances. """
 
     ret = {}
+    dom = None
     conn = libvirt.open('qemu:///system')
     try:
         # List non-running domains
@@ -21,6 +22,8 @@ def get_status(_request):
             dom = conn.lookupByName(domid)
             ret[dom.name()] = 'offline'
     finally:
+        if dom:
+            del dom
         conn.close()
 
     return ret
@@ -34,6 +37,7 @@ def domain_stop(_request, domain, kill=False):
     """
 
     conn = libvirt.open('qemu:///system')
+    dom = None
     try:
         dom = conn.lookupByName(domain)
         
@@ -47,6 +51,8 @@ def domain_stop(_request, domain, kill=False):
 
         ret = dom.isActive()
     finally:
+        if dom:
+            del dom
         conn.close()
 
     return not ret
@@ -56,6 +62,7 @@ def domain_start(_request, domain):
     """ Start a domain. """
 
     conn = libvirt.open('qemu:///system')
+    dom = None
     try:
         dom = conn.lookupByName(domain)
 
@@ -65,6 +72,8 @@ def domain_start(_request, domain):
 
         ret = dom.isActive()
     finally:
+        if dom:
+            del dom
         conn.close()
 
     return bool(ret)
