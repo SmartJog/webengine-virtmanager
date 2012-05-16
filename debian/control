@@ -9,7 +9,8 @@ Standards-Version: 3.9.1
 
 Package: webengine-virtmanager
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, webengine (>= 0.12.0), python-libvirt (>= 0.8.3)
+Depends: ${misc:Depends}, ${python:Depends}, webengine (>= 0.13.0-2),
+ python-libvirt (>= 0.8.3)
 XB-Python-Version: ${python:Versions}
 Description: virtmanager plugin for WebEngine
  WebEngine plugin that allows simple management of virtual machine managed by
