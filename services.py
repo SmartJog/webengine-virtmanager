@@ -5,10 +5,15 @@ from webengine.utils.decorators import exportable
 
 import libvirt
 import logging
+import os
+
+# Due to libvirt API bug which leak fds.
+# We change use of python bindings by calling virsh binary directly only for start and stop operations
 
 @exportable
 def get_status(_request):
     """ Return status of all virtual machine instances. """
+
 
     ret = {}
     dom = None
@@ -38,16 +43,19 @@ def domain_stop(_request, domain, kill=False):
 
     conn = libvirt.open('qemu:///system')
     dom = None
+    cmd = None
     try:
         dom = conn.lookupByName(domain)
         
         if dom.isActive():
-            dom.shutdown()
-            logging.getLogger('webengine.libvirt.services').info('VM %s stopped', dom.name())
+            cmd = "virsh -c 'qemu:///system' shutdown '%s'" % domain
 
         if dom.isActive() and kill:
-            dom.destroy()
-            logging.getLogger('webengine.libvirt.services').info('VM %s forcefully shutdown', dom.name())
+            cmd = "virsh -c 'qemu:///system' destroy '%s'" % domain
+
+        if cmd is not None:
+             logging.getLogger('webengine.libvirt.services').info(cmd)
+             os.system(cmd)
 
         ret = dom.isActive()
     finally:
@@ -55,7 +63,7 @@ def domain_stop(_request, domain, kill=False):
             del dom
         conn.close()
 
-    return not ret
+    return not bool(ret)
 
 @exportable
 def domain_start(_request, domain):
@@ -67,14 +75,14 @@ def domain_start(_request, domain):
         dom = conn.lookupByName(domain)
 
         if not dom.isActive():
-            dom.create()
-            logging.getLogger('webengine.libvirt.services').info('VM %s started', dom.name())
+            cmd = "virsh -c 'qemu:///system' start '%s'" % domain
+            logging.getLogger('webengine.libvirt.services').info(cmd)
+            os.system(cmd)
 
         ret = dom.isActive()
     finally:
         if dom:
             del dom
         conn.close()
-
     return bool(ret)
 

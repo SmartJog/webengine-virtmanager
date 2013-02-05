@@ -2,7 +2,7 @@ Source: webengine-virtmanager
 Section: misc
 Priority: optional
 Maintainer: Philippe Bridant <philippe.bridant@smartjog.com>
-Uploaders: Gilles Dartiguelongue <gilles.dartiguelongue@smartjog.com>
+Uploaders: Gilles Dartiguelongue <gilles.dartiguelongue@smartjog.com>, Jonathan Billaud <jonathan.billaud@smartjog.com>
 Build-Depends: debhelper (>= 8), cdbs (>= 0.4.89), python-central (>= 0.6)
 XS-Python-Version: >= 2.6
 Standards-Version: 3.9.1

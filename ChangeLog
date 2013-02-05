@@ -1,3 +1,8 @@
+Version 0.1.2~dev
+
+	* Modify the services.py to use virsh directly
+	  instead of the python libvirt, closes: #6587.
+
 Version 0.1.1 Released on 2011/10/24
 
 	* Delete all objects referecing connection to the hypervisor,
