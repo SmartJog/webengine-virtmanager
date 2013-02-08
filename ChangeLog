@@ -1,4 +1,4 @@
-Version 0.1.2~dev
+Version 0.1.2 Released on 2013/02/08
 
 	* Modify the services.py to use virsh directly
 	  instead of the python libvirt, closes: #6587.
