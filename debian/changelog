@@ -1,6 +1,6 @@
 webengine-virtmanager (0.1.3~dev-1) UNRELEASED; urgency=low
 
-  * New upstream release
+  * New upstream release, closes : RXTX-375
 
  -- Thibault Robert <thibault.robert@arkena.com>  Thu, 30 Jan 2014 10:38:32 +0100
 

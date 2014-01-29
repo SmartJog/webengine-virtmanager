@@ -6,9 +6,34 @@ from webengine.utils.decorators import exportable
 import libvirt
 import logging
 import os
+import ConfigParser
 
 # Due to libvirt API bug which leak fds.
 # We change use of python bindings by calling virsh binary directly only for start and stop operations
+
+
+class AddSection(object):
+    """Add dummy section to ini file since ConfigParser require at least one"""
+    def __init__(self, fp):
+        self.fp = fp
+        self.temp = 1
+        self.sechead = '[asection]\n'
+
+    def readline(self):
+        if self.temp == 1:
+            self.temp = 0
+            return self.sechead
+        else:
+            return self.fp.readline()
+
+
+def is_libvirt_on():
+    """Check if a virtualization was required"""
+    with open('/etc/default/libvirt-bin') as f:
+        cp = ConfigParser.ConfigParser({'start_libvirtd':'no'})
+        cp.readfp(AddSection(f))
+        return cp.get('asection', 'start_libvirtd').strip('"\'') == 'yes'
+
 
 @exportable
 def get_status(_request):
@@ -16,20 +41,21 @@ def get_status(_request):
 
 
     ret = {}
-    dom = None
-    conn = libvirt.open('qemu:///system')
-    try:
-        # List non-running domains
-        ret.update((conn.lookupByID(domid).name(), 'online') for domid in conn.listDomainsID())
+    if is_libvirt_on():
+        dom = None
+        conn = libvirt.open('qemu:///system')
+        try:
+            # List non-running domains
+            ret.update((conn.lookupByID(domid).name(), 'online') for domid in conn.listDomainsID())
 
-        # List running domains
-        for domid in conn.listDefinedDomains():
-            dom = conn.lookupByName(domid)
-            ret[dom.name()] = 'offline'
-    finally:
-        if dom:
-            del dom
-        conn.close()
+            # List running domains
+            for domid in conn.listDefinedDomains():
+                dom = conn.lookupByName(domid)
+                ret[dom.name()] = 'offline'
+        finally:
+            if dom:
+                del dom
+            conn.close()
 
     return ret
 
