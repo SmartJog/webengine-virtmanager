@@ -7,8 +7,8 @@ import logging
 import os
 import ConfigParser
 
-# Due to libvirt API bug which leak fds.
-# We change use of python bindings by calling virsh binary directly only for start and stop operations
+# We prevent excessive backtracing from get_status
+# To do so we check the libvirt-bin
 
 
 class AddSection(object):
@@ -43,10 +43,12 @@ def get_status(_request):
         dom = None
         conn = libvirt.open('qemu:///system')
         try:
-            # List non-running domains
-            ret.update((conn.lookupByID(domid).name(), 'online') for domid in conn.listDomainsID())
-
             # List running domains
+            for domid in conn.listDomainsID():
+                dom = conn.lookupByName(domid)
+                ret[dom.name()] = 'online'
+
+            # List non-running domains
             for domid in conn.listDefinedDomains():
                 dom = conn.lookupByName(domid)
                 ret[dom.name()] = 'offline'
@@ -56,6 +58,9 @@ def get_status(_request):
             conn.close()
 
     return ret
+
+# Due to libvirt API bug which leak fds.
+# We change use of python bindings by calling virsh binary directly only for start and stop operations
 
 
 @exportable
