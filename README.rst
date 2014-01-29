@@ -2,7 +2,7 @@
 webengine-virtmanager
 =====================
 
-webengine-virtmanager provides an Importer-based API to manager basic functions
+webengine-virtmanager provides an Importer-based API to manage basic functions
 of a system running virtual machines via libvirt.
 
 License
