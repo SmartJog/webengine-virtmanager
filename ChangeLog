@@ -2,6 +2,7 @@ Version 0.1.3~dev
 
 	* Fixed typo in README.rst
 	* Prevent tracebacking when libvirt not launched, closes: RXTX-372
+	* Fixed some PEP8 errors
 
 Version 0.1.2 Released on 2013/02/08
 

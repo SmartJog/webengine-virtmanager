@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import webengine.utils.log
 from webengine.utils.decorators import exportable
 
 import libvirt
@@ -14,32 +13,31 @@ import ConfigParser
 
 class AddSection(object):
     """Add dummy section to ini file since ConfigParser require at least one"""
-    def __init__(self, fp):
-        self.fp = fp
+    def __init__(self, ini_file):
+        self.ini_file = ini_file
         self.temp = 1
         self.sechead = '[asection]\n'
 
     def readline(self):
+        """Overide the readline method to add a section"""
         if self.temp == 1:
             self.temp = 0
             return self.sechead
         else:
-            return self.fp.readline()
+            return self.ini_file.readline()
 
 
 def is_libvirt_on():
     """Check if a virtualization was required"""
-    with open('/etc/default/libvirt-bin') as f:
-        cp = ConfigParser.ConfigParser({'start_libvirtd':'no'})
-        cp.readfp(AddSection(f))
-        return cp.get('asection', 'start_libvirtd').strip('"\'') == 'yes'
+    with open('/etc/default/libvirt-bin') as ini_file:
+        config = ConfigParser.ConfigParser({'start_libvirtd': 'no'})
+        config.readfp(AddSection(ini_file))
+        return config.get('asection', 'start_libvirtd').strip('"\'') == 'yes'
 
 
 @exportable
 def get_status(_request):
     """ Return status of all virtual machine instances. """
-
-
     ret = {}
     if is_libvirt_on():
         dom = None
@@ -59,10 +57,11 @@ def get_status(_request):
 
     return ret
 
+
 @exportable
 def domain_stop(_request, domain, kill=False):
     """ Stop a currently running domain.
-    
+
     if @kill is set to True, the VM is forcefully shut down instead of sending
     an ACPI signal.
     """
@@ -72,7 +71,7 @@ def domain_stop(_request, domain, kill=False):
     cmd = None
     try:
         dom = conn.lookupByName(domain)
-        
+
         if dom.isActive():
             cmd = "virsh -c 'qemu:///system' shutdown '%s'" % domain
 
@@ -80,8 +79,8 @@ def domain_stop(_request, domain, kill=False):
             cmd = "virsh -c 'qemu:///system' destroy '%s'" % domain
 
         if cmd is not None:
-             logging.getLogger('webengine.libvirt.services').info(cmd)
-             os.system(cmd)
+            logging.getLogger('webengine.libvirt.services').info(cmd)
+            os.system(cmd)
 
         ret = dom.isActive()
     finally:
@@ -90,6 +89,7 @@ def domain_stop(_request, domain, kill=False):
         conn.close()
 
     return not bool(ret)
+
 
 @exportable
 def domain_start(_request, domain):
@@ -111,4 +111,3 @@ def domain_start(_request, domain):
             del dom
         conn.close()
     return bool(ret)
-
