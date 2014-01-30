@@ -1,4 +1,4 @@
-Version 0.1.3~dev
+Version 0.1.3 Released on 2014/01/30
 
 	* Fixed typo in README.rst
 	* Prevent tracebacking when libvirt not launched, closes: RXTX-372
