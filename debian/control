@@ -2,15 +2,19 @@ Source: webengine-virtmanager
 Section: misc
 Priority: optional
 Maintainer: Philippe Bridant <philippe.bridant@smartjog.com>
-Uploaders: Gilles Dartiguelongue <gilles.dartiguelongue@smartjog.com>, Jonathan Billaud <jonathan.billaud@smartjog.com>
-Build-Depends: debhelper (>= 8), cdbs (>= 0.4.89), python-central (>= 0.6)
+Uploaders: Thibault Robert <thibault.robert@arkena.com>
+Build-Depends: debhelper (>= 8),
+               cdbs (>= 0.4.89),
+               python-central (>= 0.6)
 XS-Python-Version: >= 2.6
 Standards-Version: 3.9.1
 
 Package: webengine-virtmanager
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, webengine (>= 0.13.0-2),
- python-libvirt (>= 0.8.3)
+Depends: ${misc:Depends},
+         ${python:Depends},
+         webengine (>= 0.13.0-2),
+         python-libvirt (>= 0.8.3)
 XB-Python-Version: ${python:Versions}
 Description: virtmanager plugin for WebEngine
  WebEngine plugin that allows simple management of virtual machine managed by
