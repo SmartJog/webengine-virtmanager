@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.67])
-AC_INIT([webengine-virtmanager],[0.1.2])
+AC_INIT([webengine-virtmanager],[0.1.3~dev])
 
 AM_INIT_AUTOMAKE([foreign])
 AM_PATH_PYTHON([2.5])
